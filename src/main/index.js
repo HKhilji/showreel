@@ -1,11 +1,12 @@
 import 'dotenv/config'
-import { app, shell, BrowserWindow, ipcMain } from 'electron'
+import { app, shell, BrowserWindow, ipcMain, Tray, Menu, nativeImage } from 'electron'
 import { join } from 'path'
 import { electronApp, optimizer, is } from '@electron-toolkit/utils'
 import icon from '../../resources/icon.png?asset'
 import { initDatabase } from './database'
 import { searchMedia, getDetails } from './tmdb'
 import { addToWatchlist, getWatchlist, updateStatus, deleteFromWatchlist } from './watchlist'
+import { startNotificationScheduler } from './notifications'
 
 function createWindow() {
   // Create the browser window.
@@ -32,6 +33,12 @@ function createWindow() {
 
   mainWindow.on('ready-to-show', () => {
     mainWindow.show()
+    createTray(mainWindow)
+  })
+
+  mainWindow.on('close', (e) => {
+    e.preventDefault()
+    mainWindow.hide()
   })
 
   mainWindow.webContents.setWindowOpenHandler((details) => {
@@ -48,11 +55,29 @@ function createWindow() {
   }
 }
 
+let tray = null
+
+function createTray(mainWindow) {
+  const icon = nativeImage.createEmpty()
+  tray = new Tray(icon)
+
+  const contextMenu = Menu.buildFromTemplate([
+    { label: 'Open Sidequest', click: () => mainWindow.show() },
+    { label: 'Quit', click: () => app.quit() }
+  ])
+
+  tray.setToolTip('Sidequest')
+  tray.setContextMenu(contextMenu)
+
+  tray.on('click', () => mainWindow.show())
+}
+
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
 app.whenReady().then(() => {
   initDatabase()
+  startNotificationScheduler()
   // Set app user model id for windows
   electronApp.setAppUserModelId('com.electron')
 

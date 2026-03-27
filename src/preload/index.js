@@ -6,5 +6,5 @@ contextBridge.exposeInMainWorld('api', {
   addToWatchlist: (item) => ipcRenderer.invoke('add-to-watchlist', item),
   getWatchlist: () => ipcRenderer.invoke('get-watchlist'),
   updateStatus: (id, status) => ipcRenderer.invoke('update-status', id, status),
-  deleteFromWatchlist: (id) => ipcRenderer.invoke('delete-from-watchlist', id)
+  deleteFromWatchlist: (id) => ipcRenderer.invoke('delete-from-watchlist', id),
 })
