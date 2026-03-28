@@ -1,4 +1,4 @@
-# sidequest
+# Showreel
 
 An Electron application with React
 

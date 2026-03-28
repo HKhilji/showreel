@@ -7,4 +7,7 @@ contextBridge.exposeInMainWorld('api', {
   getWatchlist: () => ipcRenderer.invoke('get-watchlist'),
   updateStatus: (id, status) => ipcRenderer.invoke('update-status', id, status),
   deleteFromWatchlist: (id) => ipcRenderer.invoke('delete-from-watchlist', id),
+  checkInWatchlist: (tmdbId) => ipcRenderer.invoke('check-in-watchlist', tmdbId),
+  getRatings: (tmdbId) => ipcRenderer.invoke('get-ratings', tmdbId),
+  getSeason: (tmdbId, seasonNumber) => ipcRenderer.invoke('get-season', tmdbId, seasonNumber)
 })

@@ -20,3 +20,6 @@ export function deleteFromWatchlist(id) {
   return db.prepare('DELETE FROM watchlist WHERE id = ?').run(id)
 }
 
+export function checkInWatchlist(tmdbId) {
+  return db.prepare('SELECT id FROM watchlist WHERE tmdb_id = ?').get(tmdbId)
+}

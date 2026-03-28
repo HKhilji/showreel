@@ -8,7 +8,7 @@ function App() {
     <HashRouter>
       <div className="layout">
         <nav className="sidebar">
-          <div className="logo">Sidequest</div>
+          <div className="logo">Showreel</div>
           <NavLink to="/" className={({ isActive }) => isActive ? 'nav-link active' : 'nav-link'}>
             Watchlist
           </NavLink>

@@ -4,8 +4,8 @@ import { join } from 'path'
 import { electronApp, optimizer, is } from '@electron-toolkit/utils'
 import icon from '../../resources/icon.png?asset'
 import { initDatabase } from './database'
-import { searchMedia, getDetails } from './tmdb'
-import { addToWatchlist, getWatchlist, updateStatus, deleteFromWatchlist } from './watchlist'
+import { searchMedia, getDetails, getRatings, getSeasonDetails } from './tmdb'
+import { addToWatchlist, getWatchlist, updateStatus, deleteFromWatchlist, checkInWatchlist } from './watchlist'
 import { startNotificationScheduler } from './notifications'
 
 function createWindow() {
@@ -70,7 +70,7 @@ app.whenReady().then(() => {
   initDatabase()
   startNotificationScheduler()
   // Set app user model id for windows
-  electronApp.setAppUserModelId('com.electron')
+  electronApp.setAppUserModelId('com.showreel')
 
   // Default open or close DevTools by F12 in development
   // and ignore CommandOrControl + R in production.
@@ -86,6 +86,14 @@ app.whenReady().then(() => {
     return await searchMedia(query)
   })
 
+  ipcMain.handle('check-in-watchlist', async (_, tmdbId) => {
+    return checkInWatchlist(tmdbId)
+  })
+
+  ipcMain.handle('get-ratings', async (_, imdbId) => {
+    return await getRatings(imdbId)
+  })
+
   ipcMain.handle('add-to-watchlist', async (_, item) => {
     return addToWatchlist(item)
   })
@@ -96,6 +104,10 @@ app.whenReady().then(() => {
 
   ipcMain.handle('update-status', async (_, id, status) => {
     return updateStatus(id, status)
+  })
+
+  ipcMain.handle('get-season', async (_, tmdbId, seasonNumber) => {
+    return await getSeasonDetails(tmdbId, seasonNumber)
   })
 
   ipcMain.handle('delete-from-watchlist', async (_, id) => {

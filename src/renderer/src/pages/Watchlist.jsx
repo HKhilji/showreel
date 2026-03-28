@@ -42,6 +42,7 @@ function MediaRow({ label, items, onStatusChange, onDelete, onNavigate }) {
           display: 'flex',
           gap: '14px',
           overflowX: 'auto',
+          overflowY: 'hidden',
           paddingBottom: '12px',
           scrollbarWidth: 'none',
           msOverflowStyle: 'none'
